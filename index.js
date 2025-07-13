@@ -16,10 +16,15 @@ mongoose.connect(MONGO_URI)
   process.exit(1);
 });
 
-cron.schedule('* * * * *', async () => {
+cron.schedule('0 * * * *', async () => {
   try {
     console.log('Running cron job to fetch and store coin data...');
-    const response = await axios.get(COINGECKO_API);
+    const response = await axios.get(COINGECKO_API, {
+      headers: {
+        'User-Agent': 'YourAppName/1.0' // important for CoinGecko
+      }
+    });
+
     const historyRecords = response.data.map(coin => ({
       coinId: coin.id,
       name: coin.name,
@@ -36,5 +41,6 @@ cron.schedule('* * * * *', async () => {
     console.error('Cron job error:', error);
   }
 });
+
 
 console.log('Cron job scheduler started');
