@@ -1,18 +1,21 @@
 const cron = require('node-cron');
 const axios = require('axios');
 const History = require('../models/History');
-const connectDB = require('../config/db');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
-
 const COINGECKO_API = process.env.COINGECKO_API;
+const MONGO_URI = process.env.MONGO_URL;
 
-// Connect to MongoDB
-connectDB();
+mongoose.connect(MONGO_URI)
+.then(() => console.log('MongoDB connected'))
+.catch((err) => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1);
+});
 
-// Schedule task to run every hour
 cron.schedule('* * * * *', async () => {
   try {
     console.log('Running cron job to fetch and store coin data...');
