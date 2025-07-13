@@ -1,6 +1,6 @@
 const cron = require('node-cron');
 const axios = require('axios');
-const History = require('../models/History');
+const History = require('./models/History');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
